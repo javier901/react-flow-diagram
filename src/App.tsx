@@ -15,6 +15,7 @@ import ReactFlow, {
 import { Sidebar } from "./Sidebar";
 
 import "reactflow/dist/style.css";
+import { dataPanel } from "./data";
 
 const initialNodes = [
   {
@@ -80,7 +81,7 @@ function App() {
   return (
     <div className="flex w-screen h-screen">
       <ReactFlowProvider>
-        <Sidebar />
+        <Sidebar nodes={dataPanel} />
         <div className="w-full" ref={reactFlowWrapper}>
           <ReactFlow
             nodes={nodes}

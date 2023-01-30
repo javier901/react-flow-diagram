@@ -1,6 +1,11 @@
 import React from "react";
+import { IPanel } from "./types";
 
-export const Sidebar = () => {
+interface SidebarProps {
+  nodes: IPanel[];
+}
+
+export const Sidebar = ({ nodes }: SidebarProps) => {
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.effectAllowed = "move";
@@ -11,27 +16,16 @@ export const Sidebar = () => {
       <div className="description">
         You can drag these nodes to the pane on the right.
       </div>
-      <div
-        className="dndnode input border-2 border-blue-600 font-bold p-2 my-2 cursor-pointer"
-        onDragStart={(event) => onDragStart(event, "input")}
-        draggable
-      >
-        Input Node
-      </div>
-      <div
-        className="dndnode border-2 border-black font-bold p-2 my-2 cursor-pointer"
-        onDragStart={(event) => onDragStart(event, "default")}
-        draggable
-      >
-        Default Node
-      </div>
-      <div
-        className="dndnode border-2 border-red-600 font-bold p-2 my-2 cursor-pointer"
-        onDragStart={(event) => onDragStart(event, "output")}
-        draggable
-      >
-        Output Node
-      </div>
+      {nodes.map((node) => (
+        <div
+          key={node.type}
+          className="dndnode border-2 border-black font-bold p-2 my-2 cursor-pointer"
+          onDragStart={(event) => onDragStart(event, node.type)}
+          draggable
+        >
+          {node.title}
+        </div>
+      ))}
     </aside>
   );
 };
