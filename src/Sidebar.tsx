@@ -6,8 +6,8 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ nodes }: SidebarProps) => {
-  const onDragStart = (event: React.DragEvent, nodeType: string) => {
-    event.dataTransfer.setData("application/reactflow", nodeType);
+  const onDragStart = (event: React.DragEvent, node: IPanel) => {
+    event.dataTransfer.setData("application/reactflow", JSON.stringify(node));
     event.dataTransfer.effectAllowed = "move";
   };
 
@@ -18,9 +18,9 @@ export const Sidebar = ({ nodes }: SidebarProps) => {
       </div>
       {nodes.map((node) => (
         <div
-          key={node.type}
+          key={node.id}
           className="dndnode border-2 border-black font-bold p-2 my-2 cursor-pointer"
-          onDragStart={(event) => onDragStart(event, node.type)}
+          onDragStart={(event) => onDragStart(event, node)}
           draggable
         >
           {node.title}

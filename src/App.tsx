@@ -16,12 +16,18 @@ import { Sidebar } from "./Sidebar";
 
 import "reactflow/dist/style.css";
 import { dataPanel } from "./data";
+import { CustomNode } from "./CustomNode";
+import { IPanel } from "./types";
+
+const nodeTypes = {
+  info: CustomNode,
+};
 
 const initialNodes = [
   {
     id: "1",
-    type: "input",
-    data: { label: "input node" },
+    type: "info",
+    data: { title: "input node" },
     position: { x: 250, y: 5 },
   },
 ];
@@ -55,12 +61,14 @@ function App() {
       }
 
       const reactFlowBounds = reactFlowWrapper.current!.getBoundingClientRect();
-      const type = event.dataTransfer!.getData("application/reactflow");
+      const data = event.dataTransfer!.getData("application/reactflow");
 
       // check if the dropped element is valid
-      if (typeof type === "undefined" || !type) {
+      if (typeof data === "undefined" || !data) {
         return;
       }
+
+      const parsedData: IPanel = JSON.parse(data);
 
       const position = reactFlowInstance.project({
         x: event.clientX - reactFlowBounds.left,
@@ -68,9 +76,12 @@ function App() {
       });
       const newNode = {
         id: getId(),
-        type,
+        type: "info",
         position,
-        data: { label: `${type} node` },
+        data: {
+          title: parsedData.title,
+          subTitle: parsedData.subTitle,
+        },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -93,6 +104,7 @@ function App() {
             onDrop={onDrop}
             onDragOver={onDragOver}
             fitView
+            nodeTypes={nodeTypes}
           >
             <Controls />
             <MiniMap />
